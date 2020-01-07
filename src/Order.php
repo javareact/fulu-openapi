@@ -5,18 +5,44 @@ declare(strict_types=1);
 namespace JavaReact\FuluOpenApi;
 
 
+/**
+ * Class Order
+ * @package JavaReact\FuluOpenApi
+ */
 class Order extends Client implements OrderInterface
 {
     /**
      * @var int
      */
     const PACKET_KIND_HOUR = 1;
-    const PACKET_KIND_DAY = 2;
-    const PACKET_KIND_7DAY = 3;
-    const PACKET_KIND_MONTH = 4;
+    /**
+     *
+     */
+    const PACKET_KIND_DAY    = 2;
+    /**
+     *
+     */
+    const PACKET_KIND_7DAY   = 3;
+    /**
+     *
+     */
+    const PACKET_KIND_MONTH  = 4;
+    /**
+     *
+     */
     const PACKET_KIND_6MONTH = 5;
+    /**
+     *
+     */
     const PACKET_KIND_YEAR = 6;
 
+    /**
+     * @param string $chargePhone
+     * @param string $customerOrderNo
+     * @param float $chargeValue
+     * @param int $packetKind
+     * @return FuluOpenApiResponse
+     */
     public function fuluOrderDataAdd(string $chargePhone, string $customerOrderNo, float $chargeValue, int $packetKind) : FuluOpenApiResponse
     {
         $params = [
@@ -30,6 +56,10 @@ class Order extends Client implements OrderInterface
         return $this->request("POST", "fulu.order.data.add", $params);
     }
 
+    /**
+     * @param string $customerOrderNo
+     * @return FuluOpenApiResponse
+     */
     public function fuluOrderInfoGet(string $customerOrderNo) : FuluOpenApiResponse
     {
         $params = [
@@ -40,6 +70,12 @@ class Order extends Client implements OrderInterface
         return $this->request("POST", "fulu.order.info.get", $params);
     }
 
+    /**
+     * @param float $chargeValue
+     * @param string $chargePhone
+     * @param string $customerOrderNo
+     * @return FuluOpenApiResponse
+     */
     public function fuluOrderMobileAdd(float $chargeValue, string $chargePhone, string $customerOrderNo) : FuluOpenApiResponse
     {
         $params = [
@@ -52,6 +88,12 @@ class Order extends Client implements OrderInterface
         return $this->request("POST", "fulu.order.mobile.add", $params);
     }
 
+    /**
+     * @param int $buyNum
+     * @param int $productId
+     * @param string $customerOrderNo
+     * @return FuluOpenApiResponse
+     */
     public function fuluOrderCardAdd(int $buyNum, int $productId, string $customerOrderNo) : FuluOpenApiResponse
     {
         $params = [
@@ -64,6 +106,14 @@ class Order extends Client implements OrderInterface
         return $this->request("POST", "fulu.order.card.add", $params);
     }
 
+    /**
+     * @param string $customerOrderNo
+     * @param int $productId
+     * @param string $chargeAccount
+     * @param int $buyNum
+     * @param array $options
+     * @return FuluOpenApiResponse
+     */
     public function fuluOrderDirectAdd(string $customerOrderNo, int $productId, string $chargeAccount, int $buyNum, array $options = []) : FuluOpenApiResponse
     {
         $params = [

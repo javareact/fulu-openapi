@@ -5,8 +5,16 @@ declare(strict_types=1);
 namespace JavaReact\FuluOpenApi;
 
 
+/**
+ * Class Goods
+ * @package JavaReact\FuluOpenApi
+ */
 class Goods extends Client implements GoodsInterface
 {
+    /**
+     * @param string $productId
+     * @return FuluOpenApiResponse
+     */
     public function fuluGoodsInfoGet(string $productId): FuluOpenApiResponse
     {
         $params = [
@@ -17,6 +25,10 @@ class Goods extends Client implements GoodsInterface
         return $this->request("POST", "fulu.goods.info.get", $params);
     }
 
+    /**
+     * @param string $templateId
+     * @return FuluOpenApiResponse
+     */
     public function fuluGoodsTemplateGet(string $templateId): FuluOpenApiResponse
     {
         $params = [

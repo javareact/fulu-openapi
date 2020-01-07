@@ -6,6 +6,7 @@
   "require": {
     "php": ">=7.1",
     "guzzlehttp/guzzle": "*",
+    "psr/log": "*",
     "ext-json": "*"
   },
   "autoload": {

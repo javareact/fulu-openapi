@@ -6,6 +6,7 @@ namespace JavaReact\FuluOpenApi;
 
 use Closure;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\TransferException;
 use JavaReact\FuluOpenApi\Exception\ClientException;
 use JavaReact\FuluOpenApi\Exception\ServerException;
@@ -15,6 +16,7 @@ use Psr\Log\NullLogger;
 abstract class Client
 {
     /**
+     * 默认网关
      * @var string
      */
     const DEFAULT_URI = "https://pre-openapi.fulu.com/api/getway";
@@ -80,7 +82,7 @@ abstract class Client
     protected $appAuthToken = self::DEFAULT_APP_AUTH_TOKEN;
 
     /**
-     * @var Closure
+     * @var Closure|null
      */
     private $clientFactory;
 
@@ -96,22 +98,24 @@ abstract class Client
      * @param Closure $clientFactory
      * @param LoggerInterface|null $logger
      */
-    public function __construct(string $appKey, string $secret, Closure $clientFactory, LoggerInterface $logger = null)
+    public function __construct(string $appKey, string $secret, Closure $clientFactory = null, LoggerInterface $logger = null)
     {
-        $this->appKey = $appKey;
-        $this->secret = $secret;
+        $this->appKey        = $appKey;
+        $this->secret        = $secret;
         $this->clientFactory = $clientFactory;
-        $this->logger = $logger ?? new NullLogger();
+        $this->logger        = $logger ?? new NullLogger();
     }
 
     /**
      * @param string $token
      */
-    public function setAppAuthToken(string $token): void {
+    public function setAppAuthToken(string $token): void
+    {
         $this->appAuthToken = $token;
     }
 
     /**
+     * 处理可选参数
      * @param array $options
      * @param array $availableOptions
      * @return array
@@ -122,37 +126,47 @@ abstract class Client
     }
 
     /**
+     * 发起请求
      * @param string $method
      * @param string $apiMethod
      * @param array $options
      * @return FuluOpenApiResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function request(string $method, string $apiMethod, array $options = []): FuluOpenApiResponse
     {
         $this->logger->debug(sprintf("FuluOpenApi Request [%s] %s", strtoupper($method), $apiMethod));
         try {
             $clientFactory = $this->clientFactory;
-            $client = $clientFactory($options);
+            if ($clientFactory instanceof Closure) {
+                $client = $clientFactory($options);
+            } else {
+                $client = new \GuzzleHttp\Client([
+                    "base_uri" => self::DEFAULT_URI
+                ]);
+            }
             if (!$client instanceof ClientInterface) {
                 throw new ClientException(sprintf('The client factory should create a %s instance.', ClientInterface::class));
             }
-            $parameters = [
-                "app_key" => $this->appKey,
-                "method" => $apiMethod,
-                "timestamp" => date("Y-m-d H:i:s", time()),
-                "version" => $this->version,
-                "format" => $this->format,
-                "charset" => $this->charset,
-                "sign_type" => $this->signType,
+            $parameters      = [
+                "app_key"        => $this->appKey,
+                "method"         => $apiMethod,
+                "timestamp"      => date("Y-m-d H:i:s", time()),
+                "version"        => $this->version,
+                "format"         => $this->format,
+                "charset"        => $this->charset,
+                "sign_type"      => $this->signType,
                 "app_auth_token" => $this->appAuthToken,
-                "biz_content" => json_encode($options["json"]),
+                "biz_content"    => json_encode($options["json"]),
             ];
             $options["json"] = array_merge([
                 "sign" => $this->getSign($parameters),
             ], $parameters);
-            $response = $client->request($method, "", $options);
+            $response        = $client->request($method, "", $options);
         } catch (TransferException $e) {
+            $message = sprintf("Something went wrong when calling fulu (%s).", $e->getMessage());
+            $this->logger->error($message);
+            throw new ServerException($e->getMessage(), $e->getCode(), $e);
+        } catch (GuzzleException $e) {
             $message = sprintf("Something went wrong when calling fulu (%s).", $e->getMessage());
             $this->logger->error($message);
             throw new ServerException($e->getMessage(), $e->getCode(), $e);
@@ -161,12 +175,13 @@ abstract class Client
     }
 
     /**
+     * 获取签名
      * @param array $parameters
      * @return string
      */
     protected function getSign(array $parameters): string
     {
-        if(array_key_exists("sign", $parameters)) {
+        if (array_key_exists("sign", $parameters)) {
             unset($parameters["sign"]);
         }
         return Sign::getSign($parameters, $this->secret);

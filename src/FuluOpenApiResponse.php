@@ -43,17 +43,18 @@ class FuluOpenApiResponse
      */
     public function __call($name, $arguments)
     {
-        return  $this->response->{$name}(...$arguments);
+        return $this->response->{$name}(...$arguments);
     }
 
     /**
+     * 返回数组
      * @param string|null $key
      * @param mixed|null $default
      * @return mixed|mixed
      */
     public function json(string $key = null, $default = null)
     {
-        if (strstr( strtolower($this->response->getHeaderLine('Content-Type')), 'application/json') === false ) {
+        if (strstr(strtolower($this->response->getHeaderLine('Content-Type')), 'application/json') === false) {
             throw new ServerException('The Content-Type of response is not equal application/json');
         }
         if (is_null($this->bodyBytes)) {
@@ -71,13 +72,14 @@ class FuluOpenApiResponse
     }
 
     /**
+     * 判断返回CODE
      * @param bool $checkSign
      * @return bool
      */
     public function isSuccess(bool $checkSign = true): bool
     {
-        if($this->json("code") === 0) {
-            if($checkSign===true) {
+        if ($this->json("code") === 0) {
+            if ($checkSign === true) {
                 //todo
                 return true;
             } else {
@@ -88,12 +90,17 @@ class FuluOpenApiResponse
         }
     }
 
+    /**
+     * 获取返回CODE
+     * @return int
+     */
     public function code(): int
     {
-        return (Integer) $this->json("code", 999999); // 如果无则返回999999
+        return (Integer)$this->json("code", 999999); // 如果无则返回999999
     }
 
     /**
+     * 获取返回MESSAGE
      * @return string
      */
     public function message(): string
@@ -102,6 +109,7 @@ class FuluOpenApiResponse
     }
 
     /**
+     * 获取返回数据部分
      * @param string|null $key
      * @return mixed|null
      */

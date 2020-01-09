@@ -12,6 +12,7 @@ namespace JavaReact\FuluOpenApi;
 class Sign
 {
     /**
+     * 计算签名
      * @param array $Parameters
      * @param string $secret
      * @return string
@@ -19,17 +20,17 @@ class Sign
     static public function getSign(array $Parameters, string $secret): string
     {
         //签名步骤一：把字典json序列化
-        $json = json_encode( $Parameters, 320 );
+        $json = json_encode($Parameters, 320);
         //签名步骤二：转化为数组
-        $jsonArr = self::mb_str_split( $json );
+        $jsonArr = self::mb_str_split($json);
         //签名步骤三：排序
-        sort( $jsonArr );
+        sort($jsonArr);
         //签名步骤四：转化为字符串
-        $string = implode( '', $jsonArr );
+        $string = implode('', $jsonArr);
         //签名步骤五：在string后加入secret
         $string = $string . $secret;
         //签名步骤六：MD5加密
-        $result = strtolower( md5( $string ) );
+        $result = strtolower(md5($string));
         return $result;
     }
 
@@ -39,6 +40,6 @@ class Sign
      */
     static public function mb_str_split(string $str): array
     {
-        return preg_split('/(?<!^)(?!$)/u', $str );
+        return preg_split('/(?<!^)(?!$)/u', $str);
     }
 }

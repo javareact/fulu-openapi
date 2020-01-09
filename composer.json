@@ -1,8 +1,14 @@
 {
   "name": "javareact/fuluopenapi",
-  "description": "FuLu OpenApi SDK",
+  "description": "福禄API,FuLu OpenApi SDK",
   "type": "library",
   "license": "MIT",
+  "keywords": [
+    "福禄开放平台",
+    "FuLu",
+    "OpenApi",
+    "SDK"
+  ],
   "require": {
     "php": ">=7.1",
     "guzzlehttp/guzzle": "*",

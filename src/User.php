@@ -6,12 +6,13 @@ namespace JavaReact\FuluOpenApi;
 
 
 /**
- * Class User
+ * Class User 用户API
  * @package JavaReact\FuluOpenApi
  */
 class User extends Client implements UserInterface
 {
     /**
+     * 获取用户信息接口
      * @return FuluOpenApiResponse
      */
     public function fuluUserInfoGet(): FuluOpenApiResponse

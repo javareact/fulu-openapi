@@ -14,7 +14,16 @@ class Pay extends Client implements PayInterface
      */
     public function fuluAlipayH5Pay(string $outTradeNo, float $totalAmount, string $subject, string $passbackParams, string $return_url): FuluOpenApiResponse
     {
-        // TODO: Implement fuluAlipayH5Pay() method.
+        $params = [
+            "json" => [
+                'out_trade_no'    => $outTradeNo,
+                'total_amount'    => $totalAmount,
+                'subject'         => $subject,
+                'passback_params' => $passbackParams,
+                'return_url'      => $return_url,
+            ],
+        ];
+        return $this->request("POST", "fulu.alipay.h5.pay", $params);
     }
 
     /**
@@ -22,7 +31,15 @@ class Pay extends Client implements PayInterface
      */
     public function fuluAlipayAppPay(string $outTradeNo, float $totalAmount, string $subject, string $passbackParams): FuluOpenApiResponse
     {
-        // TODO: Implement fuluAlipayAppPay() method.
+        $params = [
+            "json" => [
+                'out_trade_no'    => $outTradeNo,
+                'total_amount'    => $totalAmount,
+                'subject'         => $subject,
+                'passback_params' => $passbackParams,
+            ],
+        ];
+        return $this->request("POST", "fulu.alipay.app.pay", $params);
     }
 
     /**
@@ -30,7 +47,13 @@ class Pay extends Client implements PayInterface
      */
     public function fuluAlipayH5Query(array $options = []): FuluOpenApiResponse
     {
-        // TODO: Implement fuluAlipayH5Query() method.
+        $params = [
+            "json" => $this->resolveOptions($options, [
+                "out_trade_no",
+                "trade_no",
+            ])
+        ];
+        return $this->request("POST", "fulu.alipay.h5.query", $params);
     }
 
     /**
@@ -38,7 +61,13 @@ class Pay extends Client implements PayInterface
      */
     public function fuluAlipayH5Refund(string $outTradeNo, float $refundAmount): FuluOpenApiResponse
     {
-        // TODO: Implement fuluAlipayH5Refund() method.
+        $params = [
+            "json" => [
+                'out_trade_no'  => $outTradeNo,
+                'refund_amount' => $refundAmount,
+            ],
+        ];
+        return $this->request("POST", "fulu.alipay.h5.refund", $params);
     }
 
     /**
@@ -46,7 +75,12 @@ class Pay extends Client implements PayInterface
      */
     public function fuluAlipayRefundQuery(string $outTradeNo): FuluOpenApiResponse
     {
-        // TODO: Implement fuluAlipayRefundQuery() method.
+        $params = [
+            "json" => [
+                'out_trade_no' => $outTradeNo,
+            ],
+        ];
+        return $this->request("POST", "fulu.alipay.refund.query", $params);
     }
 
     /**
@@ -54,7 +88,18 @@ class Pay extends Client implements PayInterface
      */
     public function fuluWechatH5Pay(string $outTradeNo, float $totalFee, string $spbillCreateIp, string $passbackParams, array $options = []): FuluOpenApiResponse
     {
-        // TODO: Implement fuluWechatH5Pay() method.
+        $params = [
+            "json" => array_merge([
+                "out_trade_no"     => $outTradeNo,
+                "total_fee"        => $totalFee,
+                "spbill_create_ip" => $spbillCreateIp,
+                "passback_params"  => $passbackParams
+            ], $this->resolveOptions($options, [
+                "body",
+                "return_url"
+            ])),
+        ];
+        return $this->request("POST", "fulu.wechatpay.h5.pay", $params);
     }
 
     /**
@@ -62,7 +107,12 @@ class Pay extends Client implements PayInterface
      */
     public function fuluWechatH5Query(string $outTradeNo): FuluOpenApiResponse
     {
-        // TODO: Implement fuluWechatH5Query() method.
+        $params = [
+            "json" => [
+                'out_trade_no' => $outTradeNo,
+            ],
+        ];
+        return $this->request("POST", "fulu.wechatpay.h5.query", $params);
     }
 
     /**
@@ -70,7 +120,15 @@ class Pay extends Client implements PayInterface
      */
     public function fuluWechatH5Refund(string $outTradeNo, float $totalFee, float $refundFee, string $outRefundNo): FuluOpenApiResponse
     {
-        // TODO: Implement fuluWechatH5Refund() method.
+        $params = [
+            "json" => [
+                'out_trade_no'  => $outTradeNo,
+                'total_fee'     => $totalFee,
+                'refund_fee'    => $refundFee,
+                'out_refund_no' => $outRefundNo,
+            ],
+        ];
+        return $this->request("POST", "fulu.wechatpay.h5.refund", $params);
     }
 
     /**
@@ -78,6 +136,11 @@ class Pay extends Client implements PayInterface
      */
     public function fuluWechatRefundQuery(string $outTradeNo): FuluOpenApiResponse
     {
-        // TODO: Implement fuluWechatRefundQuery() method.
+        $params = [
+            "json" => [
+                'out_trade_no' => $outTradeNo,
+            ],
+        ];
+        return $this->request("POST", "fulu.wechatpay.refund.query", $params);
     }
 }

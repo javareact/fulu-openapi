@@ -1,9 +1,7 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Test\FuluOpenApi;
-
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;

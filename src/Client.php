@@ -147,7 +147,7 @@ abstract class Client
             if (!$client instanceof ClientInterface) {
                 throw new ClientException(sprintf('The client factory should create a %s instance.', ClientInterface::class));
             }
-            $parameters      = [
+            $parameters        = [
                 "app_key"        => $this->appKey,
                 "method"         => $apiMethod,
                 "timestamp"      => date("Y-m-d H:i:s", time()),
@@ -158,10 +158,11 @@ abstract class Client
                 "app_auth_token" => $this->appAuthToken,
                 "biz_content"    => json_encode($options["json"]),
             ];
-            $options["json"] = array_merge([
+            $options['verify'] = false;//关闭SSL
+            $options["json"]   = array_merge([
                 "sign" => $this->getSign($parameters),
             ], $parameters);
-            $response        = $client->request($method, "", $options);
+            $response          = $client->request($method, "", $options);
         } catch (TransferException $e) {
             $message = sprintf("Something went wrong when calling fulu (%s).", $e->getMessage());
             $this->logger->error($message);

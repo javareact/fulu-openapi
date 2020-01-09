@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\FuluOpenApi;
 
-
 use GuzzleHttp\Client;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +20,7 @@ class GoodsTest extends TestCase
     /**
      * @var Goods
      */
-    private $user;
+    private $goods;
 
     protected function setUp(): void
     {
@@ -33,6 +32,16 @@ class GoodsTest extends TestCase
                 "base_uri" => Contains::TEST_GATEWAY,
             ]);
         }, $logger);
+    }
+
+    public function testFuluGoodsListGet()
+    {
+        $response = $this->goods->fuluGoodsListGet([
+            'product_type' => '卡密'
+        ]);
+        var_export($response->result());
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(true, $response->isSuccess());
     }
 
     public function testFuluGoodsInfoGet()

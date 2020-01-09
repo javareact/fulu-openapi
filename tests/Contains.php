@@ -31,4 +31,7 @@ class Contains
     const TEST_ORDER_DATA_ADD_SUCCESS_PHONE = "15972368779";
 
     const TEST_ORDER_DATA_ADD_FAILURE_PHONE = "13971553804";
+
+    /** @var string AES的key */
+    const TEST_AES_SECRET = '0a091b3aa4324435aab703142518a8f7';
 }

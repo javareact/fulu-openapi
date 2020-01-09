@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace JavaReact\FuluOpenApi;
+namespace JavaReact\FuluOpenApi\Tools;
 
 /**
  * fulu提供的签名算法

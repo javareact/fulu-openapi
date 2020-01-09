@@ -51,7 +51,6 @@ class Sign
      */
     public static function verifySign(string $results, string $secret)
     {
-        $results = json_encode(json_decode($results), JSON_UNESCAPED_UNICODE);
         if (empty($results)) {
             return false;
         }
@@ -59,10 +58,13 @@ class Sign
         if (empty($oriArr['sign'])) {
             return false;
         }
+        $sign = $oriArr['sign'];
+        unset($oriArr['sign']);
+        $results   = json_encode($oriArr, JSON_UNESCAPED_UNICODE);
         $resultArr = mb_str_split($results);
         sort($resultArr, SORT_STRING);
         $data = implode('', $resultArr) . $secret;
-        return strtolower(md5($data)) === $oriArr['sign'];
+        return strtolower(md5($data)) === $sign;
     }
 
 }

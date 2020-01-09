@@ -25,11 +25,7 @@ class SignTest extends TestCase
      */
     public function testVerifySign()
     {
-        $a = <<<e
-{
-}
-e;
-
+        $a      = '{"order_id":"19102237851777002017","charge_finish_time":"2019-10-22 20:17:57","customer_order_no":"123456","order_status":"success","recharge_description":"充值成功","product_id":"10000489","price":"50.0000","buy_num":"1","operator_serial_number":"--","sign":"35d1c3403c42d2df58ed4e37991deee3"}';
         $result = Sign::verifySign($a, Contains::TEST_AES_SECRET);
         var_export($result);
     }

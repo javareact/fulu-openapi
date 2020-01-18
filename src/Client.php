@@ -132,6 +132,7 @@ abstract class Client
      * @param string $apiMethod
      * @param array $options
      * @return FuluOpenApiResponse
+     * @throws ServerException
      */
     protected function request(string $method, string $apiMethod, array $options = []): FuluOpenApiResponse
     {

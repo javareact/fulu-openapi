@@ -61,7 +61,7 @@ class Sign
         $sign = $oriArr['sign'];
         unset($oriArr['sign']);
         $results   = json_encode($oriArr, JSON_UNESCAPED_UNICODE);
-        $resultArr = mb_str_split($results);
+        $resultArr = self::mb_str_split($results);
         sort($resultArr, SORT_STRING);
         $data = implode('', $resultArr) . $secret;
         return strtolower(md5($data)) === $sign;
